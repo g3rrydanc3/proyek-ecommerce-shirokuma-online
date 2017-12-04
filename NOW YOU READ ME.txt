@@ -1,0 +1,16 @@
+
+recommended -> tampilkan yg sama kategorinya -> masih random
+status pengiriman ganti, kirim email lagi
+
+banner bisa di-edit di admin (master banner) (melani)
+voucher -> status sudah dipake/belum -> cuma dipake 1x (melani)
+user upload bukti kirim (melani)
+admin cek bukti kirim -> master order (melani)
+
+link item diganti nama barang (sendy)
+
+edit varian barang diganti tab (devi)
+wishlist (devi)
+
+(sendy + devi)
+selesaikan order + pilihan transfer atm 
