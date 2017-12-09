@@ -1,4 +1,6 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) {
+	exit('No direct script access allowed');
+}
 
 /**
  * Takes an array of values and ouputs them as a string between
@@ -9,16 +11,15 @@
  */
 function array_string($defaultValues)
 {
-    $tmp = '[ ';
+	$tmp = '[ ';
 
-    natcasesort($defaultValues);
+	natcasesort($defaultValues);
 
-    foreach($defaultValues as $k => $v)
-    {
-        $tmp .= $v . ' | ';
-    }
+	foreach ($defaultValues as $k => $v) {
+		$tmp .= $v.' | ';
+	}
 
-    return substr_replace($tmp, "", -2) . ']';
+	return substr_replace($tmp, "", -2).']';
 }
 
 /**
@@ -30,14 +31,12 @@ function array_string($defaultValues)
  */
 function array_is_multi($arr)
 {
-    $rv = array_filter($arr, 'is_array');
+	$rv = array_filter($arr, 'is_array');
 
-    if(count($rv) > 0)
-    {
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+	if (count($rv) > 0) {
+		return TRUE;
+	}
+	return FALSE;
 }
 
 /**
@@ -48,36 +47,30 @@ function array_is_multi($arr)
  */
 function array_values_check(&$arr, $type, $extra = NULL)
 {
-    $status = TRUE;
+	$status = TRUE;
 
-    if(is_array($arr) && is_string($type))
-    {
-        if($type == 'class' && is_string($extra) && !empty($extra))
-        {
-            foreach($arr as $item)
-            {
-                if(is_a($item, $extra) == FALSE)
-                {
-                    $status = FALSE;
-                    break;
-                }
-            }
-        } else {
-            foreach($arr as $item)
-            {
-                $function = 'is_'.$type;
-                if($function($item) == FALSE)
-                {
-                    $status = FALSE;
-                    break;
-                }
-            }
-        }
-    } else {
-        $status = FALSE;
-    }
+	if (is_array($arr) && is_string($type)) {
+		if ($type == 'class' && is_string($extra) && !empty($extra)) {
+			foreach ($arr as $item) {
+				if (is_a($item, $extra) == FALSE) {
+					$status = FALSE;
+					break;
+				}
+			}
+		} else {
+			foreach ($arr as $item) {
+				$function = 'is_'.$type;
+				if ($function($item) == FALSE) {
+					$status = FALSE;
+					break;
+				}
+			}
+		}
+	} else {
+		$status = FALSE;
+	}
 
-    return $status;
+	return $status;
 }
 
 /**
@@ -91,32 +84,25 @@ function array_values_check(&$arr, $type, $extra = NULL)
  */
 function is_int_or_percent($val)
 {
-    if(is_int($val) === TRUE)
-    {
-        return TRUE;
-    } else if(is_string($val) === TRUE)
-    {
-        if(ctype_digit($val) === TRUE)
-        {
-            return TRUE;
-        } else {
-            if($val[strlen($val) - 1] == '%')
-            {
-                $tmp = str_replace('%', '', $val);
+	if (is_int($val) === TRUE) {
+		return TRUE;
+	} else {
+		if (is_string($val) === TRUE) {
+			if (ctype_digit($val) === TRUE) {
+				return TRUE;
+			}
+			if ($val[strlen($val) - 1] == '%') {
+				$tmp = str_replace('%', '', $val);
 
-                if(ctype_digit((string) $tmp) === TRUE)
-                {
-                    return TRUE;
-                } else {
-                    return FALSE;
-                }
-            } else {
-                return FALSE;
-            }
-        }
-    } else {
-        return FALSE;
-    }
+				if (ctype_digit((string) $tmp) === TRUE) {
+					return TRUE;
+				}
+				return FALSE;
+			}
+			return FALSE;
+		}
+	}
+	return FALSE;
 }
 
 /**
@@ -133,10 +119,8 @@ function is_int_or_percent($val)
  */
 function between($test, $lower, $upper, $inclusive = TRUE)
 {
-    if($inclusive === TRUE)
-    {
-        return ($test >= $lower && $test <= $upper) ? TRUE : FALSE;
-    } else {
-        return ($test > $lower && $test < $upper) ? TRUE : FALSE;
-    }
+	if ($inclusive === TRUE) {
+		return ($test >= $lower && $test <= $upper) ? TRUE : FALSE;
+	}
+	return ($test > $lower && $test < $upper) ? TRUE : FALSE;
 }

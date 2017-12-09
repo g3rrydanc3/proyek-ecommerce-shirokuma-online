@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Veritrans {
 
@@ -7,7 +7,7 @@ class Veritrans {
    	* @static
    	*/
 	public static $serverKey;
-	
+
 	/**
    	* true for production
    	* false for sandbox mode
@@ -19,7 +19,7 @@ class Veritrans {
    	* Default options for every request
    	* @static
    	*/
-  	public static $curlOptions = array();	
+  	public static $curlOptions = array();
 
   	const SANDBOX_BASE_URL = 'https://api.sandbox.veritrans.co.id/v2';
   	const PRODUCTION_BASE_URL = 'https://api.veritrans.co.id/v2';
@@ -69,8 +69,8 @@ class Veritrans {
 	 * @param bool    $post
 	 */
     public static function remoteCall($url, $server_key, $data_hash, $post = true)
-    {	
-    
+    {
+
 	    $ch = curl_init();
 
 	    $curl_options = array(
@@ -112,7 +112,7 @@ class Veritrans {
 
 	    $result = curl_exec($ch);
 	    // curl_close($ch);
-	   
+
 	    if ($result === FALSE) {
 	      throw new Exception('CURL Error: ' . curl_error($ch), curl_errno($ch));
 	    }
@@ -130,7 +130,7 @@ class Veritrans {
     }
 
     public static function vtweb_charge($payloads)
-    {	
+    {
 
     	$result = Veritrans::post(
         Veritrans::getBaseUrl() . '/charge',
@@ -145,7 +145,7 @@ class Veritrans {
     }
 
     public static function vtdirect_charge($payloads)
-    {	
+    {
 
     	$result = Veritrans::post(
         Veritrans::getBaseUrl() . '/charge',
@@ -158,7 +158,7 @@ class Veritrans {
     	//$url = Veritrans::getBaseUrl();
     	//return Veritrans::$serverKey.Veritrans::getBaseUrl() . '/charge' ;
     }
-	
+
     /**
    	* Retrieve transaction status
    	* @param string $id Order ID or transaction ID
