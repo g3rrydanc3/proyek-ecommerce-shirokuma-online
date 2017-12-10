@@ -93,14 +93,18 @@ class Payment extends  CI_Controller
 	}
 	public function notification()
 	{
-		echo 'test notification handler';
-		$json_result = file_get_contents('php://input');
+		if($this->input->get("order_id")){
+			/*$json_result = file_get_contents('php://input');
+		var_dump($json_result);
 		$result = json_decode($json_result);
+		var_dump($result);*/
+		
+		$order_id = $this->input->get("order_id");
 
-		if ($result) {
-			$notif = $this->veritrans->status($result->order_id);
-		}
-		error_log(print_r($result,TRUE));
+		//if ($result) {
+			//$notif = $this->veritrans->status($result->order_id);
+			$notif = $this->veritrans->status($order_id);
+		//}
 		//notification handler sample
 		$transaction = $notif->transaction_status;
 		$transaction_id = $notif->transaction_id;
@@ -139,6 +143,7 @@ class Payment extends  CI_Controller
 					}
 				}
 			}
+		}
 		}
 	}
 }
