@@ -143,7 +143,7 @@ class Order_model extends CI_Model
 	public function changeOrder($horder_id,$to)
 	{
 		$data = ['status' => $to];
-		$this->db->set('tanggal_update','now()',false);
+		$this->db->set('tanggal','now()',false);
 		$this->db->where('id', $horder_id);
 		$this->db->update('log_order',$data);
 		return $this->db->affected_rows();
