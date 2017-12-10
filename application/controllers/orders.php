@@ -8,14 +8,14 @@ class Orders extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->session->userdata('p_username')) {
+		if (!$this->session->p_username) {
 			$this->session->set_flashdata('alert_level','danger');
 			$this->session->set_flashdata('alert','You need to login to view this page!');
 			$this->session->set_userdata('current_url', uri_string());
 			redirect('auth/login');
 		}
 		$this->load->model('order_model');
-		$this->load->model('model_Voucher');
+		$this->load->model('model_voucher');
 	}
 	public function index()
 	{
@@ -167,36 +167,79 @@ class Orders extends CI_Controller
 	public function getOngkirBarang()
 	{
 		if ($this->input->post('kode_kurir')) {
-			$this->load->library('curl');
 			$totalGram = 0;
 			foreach ($this->cart->contents() as $item) {
 				$product_options = $this->cart->product_options($item['rowid']);
 				$totalGram = $totalGram + $product_options['berat_gram'] * $item['qty'];
 			}
-			$arr = json_decode($this->curl->simple_post('http://api.rajaongkir.com/starter/cost',
-                ['key' => '113259fb5a91db18a375b5890065d246',
-                    'origin' => 444,
-                    'destination' => $this->session->userdata('kota_penerima_id'),
-                    'weight' => $totalGram,
-                    'courier' => $this->input->post('kode_kurir')
-                ]
-            ))->rajaongkir;
-			$arrCourier = $arr->results;
-			foreach ($arrCourier as $courier) {
-				if (count($courier->costs) > 0) {
-					$arrService = $courier->costs;
-					foreach ($arrService as $service) {
-						echo form_radio(['name' => 'radio_service', 'data-val' => $service->cost[0]->value, 'value' => $service->service])." ".$courier->name." ".$service->service." ( IDR ".number_format($service->cost[0]->value).") ";
-						if ($service->cost[0]->etd != "") {
-							echo $service->cost[0]->etd." hari ";
-						} else {
-							if ($service->cost[0]->etd == "1-1") {
-								echo "1 hari ";
+			
+			$kota_penerima_id = $this->session->userdata('kota_penerima_id');
+			$kode_kurir = $this->input->post('kode_kurir');
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => "",
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => "POST",
+				CURLOPT_POSTFIELDS => "origin=444&destination=$kota_penerima_id&weight=$totalGram&courier=$kode_kurir",
+				CURLOPT_HTTPHEADER => array(
+					"content-type: application/x-www-form-urlencoded",
+					"key: 113259fb5a91db18a375b5890065d246"
+				),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+
+			if (!$err) {
+				$arr = json_decode($response)->rajaongkir;
+				if($arr->status->code == "200"){		//error code 200 = ok
+					$arrCourier = $arr->results;
+				
+					foreach ($arrCourier as $courier) {
+						if (count($courier->costs) > 0) {
+							$arrService = $courier->costs;
+							foreach ($arrService as $service) {
+								$data_radio = array(
+									'name' => 'radio_service',
+									'data-val' => $service->cost[0]->value,
+									'value' => $service->service
+								);
+								echo '<label class="radio-inline">'.
+								form_radio($data_radio).
+								$service->service.
+								"<br>".
+								"IDR ".
+								number_format($service->cost[0]->value).
+								"<br>";
+								
+								if ($service->cost[0]->etd != "") {
+									echo $service->cost[0]->etd." hari ";
+								} else {
+									if ($service->cost[0]->etd == "1-1") {
+										echo "1 hari ";
+									}
+								}
+								echo '</label>';
+								
+								
+								echo "<hr>";
 							}
 						}
-						echo "<br/>";
 					}
 				}
+				else{
+					echo $arr->status->description;
+				}
+			} else {
+				echo $response;
+				echo "cURL Error #:" . $err;
 			}
 		}
 	}

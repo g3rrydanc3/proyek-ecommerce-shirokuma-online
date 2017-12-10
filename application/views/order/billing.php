@@ -110,16 +110,23 @@
 </div>
 
 <script>
+	function get_city(nilai_id){
+		$('#city_id').attr('disabled','');
+		$.post('<?php echo site_url('profile/getCity');?>',{province_id:nilai_id}, function (data){
+			$('#city_id').html(data);
+			$('#city_id').removeAttr('disabled');
+		});
+	}
+	
      $('#provinsi_id').change(function(e){
         $('input[name="provinsi"]').val($('#provinsi_id option:selected').text());
-        var nilai_id = $('#provinsi_id').val();
-        $('#city_id').attr('disabled','');
-        $.post('<?php echo site_url('profile/getCity');?>',{province_id:nilai_id}, function (data){
-            $('#city_id').html(data);
-            $('#city_id').removeAttr('disabled');
-        });
+		get_city($('#provinsi_id').val());
     });
+	
     $('#city_id').change(function(e){
         $('input[name="city"]').val($('#city_id option:selected').text());
     });
+	
+	get_city($('#provinsi_id').val());
+	
 </script>
