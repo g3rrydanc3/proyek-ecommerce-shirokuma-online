@@ -149,7 +149,12 @@ class Barang_model extends CI_Model
 	}
 	public function getOtherBarang()
 	{
-		$sql = "select b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, k.nama as kategori from barang b, kategori k where k.id = b.kategori_id and b.stok > 0 and b.status = 1 order by rand() limit 4";
+		$sql = $this->db->select('b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, k.nama as kategori')
+		->from('barang b, kategori k')
+		->where('k.id = b.kategori_id and b.stok > 0 and b.status = 1')
+		->order_by('rand()')
+		->limit(4)
+		->get_compiled_select();
 		$results = $this->db->query($sql)->result();
 		$items =  [];
 		foreach ($results as $result) {
@@ -169,14 +174,31 @@ class Barang_model extends CI_Model
 	}
 	public function getSomeBarang($mode)
 	{
+		$sql = null;
 		if ($mode == "popular") {
-			$sql = "select b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, b.jumlah_lihat, k.nama as kategori from barang b, kategori k where k.id = b.kategori_id and b.stok > 0 and b.status = 1 order by b.jumlah_lihat limit 4";
+			$sql = $this->db->select('b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, b.jumlah_lihat, k.nama as kategori')
+			->from('barang b, kategori k')
+			->where('k.id = b.kategori_id and b.stok > 0 and b.status = 1')
+			->order_by('b.jumlah_lihat')
+			->limit(4)
+			->get_compiled_select();
 		}
 		if ($mode == "random") {
-			$sql = "select b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, k.nama as kategori from barang b, kategori k where k.id = b.kategori_id and b.stok > 0 and b.status = 1 order by rand() limit 4";
+			$sql = $this->db->select('b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, b.jumlah_lihat, k.nama as kategori')
+			->from('barang b, kategori k')
+			->where('k.id = b.kategori_id and b.stok > 0 and b.status = 1')
+			->order_by('b.jumlah_lihat')
+			->limit(4)
+			->get_compiled_select();
 		}
 		if ($mode == "recent") {
-			$sql = "select distinct b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, b.jumlah_lihat, k.nama as kategori from dorder d, barang b, kategori k where k.id = b.kategori_id and b.stok > 0 and b.status = 1 and d.barang_id = b.id order by d.id limit 4";
+			$sql = $this->db->select('b.id, b.nama, b.harga, b.diskon,b.berat_gram, b.gambar, b.jumlah_lihat, k.nama as kategori')	
+			->distinct()
+			->from('dorder d,barang b, kategori k')
+			->where('k.id = b.kategori_id and b.stok > 0 and b.status = 1 and d.barang_id = b.id')
+			->order_by('b.jumlah_lihat')
+			->limit(4)
+			->get_compiled_select();
 		}
 		$results = $this->db->query($sql)->result();
 		$items =  [];
