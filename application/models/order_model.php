@@ -160,7 +160,7 @@ class Order_model extends CI_Model
 		$this->changeOrder($horder_id,'2');
 		$this->insertLog($horder_id," Berhasil Menyelesaikan transaksi. Order sedang diproses.");
 
-		$data = ['kode_pembayaran' => $transaction_id, 'tipe_pembayaran', $payment_type];
+		$data = ['kode_pembayaran' => $transaction_id, 'tipe_pembayaran' => $payment_type];
 		$this->db->where('id',$horder_id);
 		$this->db->update('horder',$data);
 

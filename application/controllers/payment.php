@@ -95,55 +95,72 @@ class Payment extends  CI_Controller
 	{
 		if($this->input->get("order_id")){
 			/*$json_result = file_get_contents('php://input');
-		var_dump($json_result);
-		$result = json_decode($json_result);
-		var_dump($result);*/
-		
-		$order_id = $this->input->get("order_id");
+			var_dump($json_result);
+			$result = json_decode($json_result);
+			var_dump($result);*/
+			
+			$order_id = $this->input->get("order_id");
 
-		//if ($result) {
-			//$notif = $this->veritrans->status($result->order_id);
-			$notif = $this->veritrans->status($order_id);
-		//}
-		//notification handler sample
-		$transaction = $notif->transaction_status;
-		$transaction_id = $notif->transaction_id;
-		$type = $notif->payment_type;
-		$order_id = $notif->order_id;
-		$fraud = $notif->fraud_status;
-
-		if ($transaction == 'capture') {
-			// For credit card transaction, we need to check whether transaction is challenge by FDS or not
-			if ($type == 'credit_card') {
-				if ($fraud == 'challenge') {
-					// TODO set payment status in merchant's database to 'Challenge by FDS'
-					// TODO merchant should decide whether this transaction is authorized or not in MAP
-					echo "Transaction order_id: ".$order_id." is challenged by FDS";
-					$this->order_model->changeOrderToProblem($order_id);
-				} else {
-					// TODO set payment status in merchant's database to 'Success'
-					echo "Transaction order_id: ".$order_id." successfully captured using ".$type;
-					$this->order_model->changeOrderToFinishPayment($order_id,$transaction_id,$type);
-				}
+			//if ($result) {
+				//$notif = $this->veritrans->status($result->order_id);
+				$notif = $this->veritrans->status($order_id);
+			//}
+			//notification handler sample
+			$transaction = null;
+			if(isset($notif->transaction_status)){
+				$transaction = $notif->transaction_status;
 			}
-		} else {
-			if ($transaction == 'settlement') {
-				// TODO set payment status in merchant's database to 'Settlement'
-				echo "Transaction order_id: ".$order_id." successfully transfered using ".$type;
-				$this->order_model->changeOrderToFinishPayment($order_id,$transaction_id,$type);
+			$fraud = null;
+			if(isset($notif->fraud_status)){
+				$fraud = $notif->fraud_status;
+			}
+			$transaction_id = null;
+			if(isset($notif->transaction_id)){
+				$transaction_id = $notif->transaction_id;
+			}
+			$type = null;
+			if(isset($notif->payment_type)){
+				$type = $notif->payment_type;
+			}
+			$order_id = null;
+			if(isset($notif->order_id)){
+				$order_id = $notif->order_id;
+			}
+			$data['message'] = "";
+
+			if ($transaction == 'capture') {
+				// For credit card transaction, we need to check whether transaction is challenge by FDS or not
+				if ($type == 'credit_card') {
+					if ($fraud == 'challenge') {
+						// TODO set payment status in merchant's database to 'Challenge by FDS'
+						// TODO merchant should decide whether this transaction is authorized or not in MAP
+						$data['message'] = "Transaction order_id: ".$order_id." is challenged by FDS";
+						$this->order_model->changeOrderToProblem($order_id);
+					} else {
+						// TODO set payment status in merchant's database to 'Success'
+						$data['message'] = "Transaction order_id: ".$order_id." successfully captured using ".$type;
+						$this->order_model->changeOrderToFinishPayment($order_id,$transaction_id,$type);
+					}
+				}
 			} else {
-				if ($transaction == 'pending') {
-					// TODO set payment status in merchant's database to 'Pending'
-					echo "Waiting customer to finish transaction order_id: ".$order_id." using ".$type;
-					$this->order_model->changeOrderToPending($order_id);
+				if ($transaction == 'settlement') {
+					// TODO set payment status in merchant's database to 'Settlement'
+					$data['message'] = "Transaction order_id: ".$order_id." successfully transfered using ".$type;
+					$this->order_model->changeOrderToFinishPayment($order_id,$transaction_id,$type);
 				} else {
-					if ($transaction == 'deny') {
-						// TODO set payment status in merchant's database to 'Denied'
-						echo "Payment using ".$type." for transaction order_id: ".$order_id." is denied.";
+					if ($transaction == 'pending') {
+						// TODO set payment status in merchant's database to 'Pending'
+						$data['message'] = "Waiting customer to finish transaction order_id: ".$order_id." using ".$type;
+						$this->order_model->changeOrderToPending($order_id);
+					} else {
+						if ($transaction == 'deny') {
+							// TODO set payment status in merchant's database to 'Denied'
+							$data['message'] = "Payment using ".$type." for transaction order_id: ".$order_id." is denied.";
+						}
 					}
 				}
 			}
-		}
+			$this->load->view('order/payment_notification', $data);
 		}
 	}
 }
