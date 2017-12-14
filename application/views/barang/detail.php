@@ -63,56 +63,96 @@
             <div class="product-information"><!--/product-information-->
                 <!--<img src="_images/coba.jpg" class="newarrival" alt="" />-->
                 <h2><?php echo $barang['nama'];?></h2>
-                <p>#ID: <?php echo $barang['id'];?></p>
-								<span>
-									<?php
-                                    if ($barang['diskon'] > 0 ){
-                                        echo "<span>IDR <s>".number_format($barang['harga'])."</s> <strong class='text-danger'>".number_format($barang['harga_total'])."</strong></span><br/>";
-                                    }
-                                    else {
-                                        echo "<span>IDR ".number_format($barang['harga_total'])."</span><br/>";
-                                    }
-                                    ?>
-                                        <p><b>Brand:</b><?php echo $barang['brand'];?></p>
-                                        <p><b>Availability:</b>
-                                            <?php if ( $barang['stok'] > 0) {
-                                                echo "<span class='label label-success'>In Stock</span><br/><br/>"; ?>
-                                                <label for="injumtocart">Quantity:</label>
-                                                <input type="number" max="<?php echo $barang['stok']; ?>" value="1" name="injumtocart" id="injumtocart"  min="1"/><br/>
-                                                <strong>Color </strong>: <select id="warna">
-                                                    <?php
-                                                        foreach ($barang['warna'] as $warna){
-                                                            echo "<option value='$warna'>$warna</option>";
-                                                        }
-                                                    ?>
-                                                </select>
-                                                <button type="submit" class="btn btn-default cart btn-sm" name='btnaddtocart' data-id="<?php echo $barang['id'];?>">
-                                                    <i class="glyphicon glyphicon-shopping-cart"></i> Add to cart
-                                                </button>
-                                            <?php }
-                                            else {
-                                                echo "<span class='label label-danger'>Out of Stock</span><br/>";
-                                            }?>
-                                        </p>
 
+					 <hr class='hr-slim'>
 
-                                    </form>
-								</span>
+					 <h3>
+						 <?php
+							 if ($barang['diskon'] > 0 ){
+								  echo "IDR <s>".number_format($barang['harga'])."</s> <strong class='text-danger'>".number_format($barang['harga_total'])."</strong>";
+							 }
+							 else {
+								  echo "IDR ".number_format($barang['harga_total']);
+							 }
+						 ?>
+					 </h3>
+
+					 <table class="table-item-description">
+						 <tr>
+							 <td class="text-right">
+								 <label>Brand</label>
+							 </td>
+							 <td class="text-left">
+								 <?php echo $barang['brand'];?>
+							 </td>
+						 </tr>
+						 <tr>
+							 <td class="text-right">
+								 <label>Availability</label>
+							 </td>
+							 <td class="text-left">
+								 <?php if ( $barang['stok'] > 0) :?>
+									  <span class='label label-success'>In Stock</span>
+						  		 <?php endif;?>
+							 </td>
+						 </tr>
+						 <?php if ( $barang['stok'] > 0) :?>
+							 <tr>
+								 <td class="text-right">
+									 <label for="injumtocart">Quantity</label>
+								 </td>
+								 <td class="text-left">
+									 <input type="number" max="<?php echo $barang['stok']; ?>" value="1" name="injumtocart" id="injumtocart"  min="1" class='form-control'/>
+								 </td>
+							 </tr>
+							 <tr>
+								 <td class="text-right">
+									 <label>Color</label>
+								 </td>
+								 <td class="text-left">
+									 <select id="warna" class='form-control'>
+										  <?php
+												foreach ($barang['warna'] as $warna){
+													 echo "<option value='$warna'>$warna</option>";
+												}
+										  ?>
+									 </select>
+								 </td>
+							 </tr>
+							 <tr>
+								 <td class="text-right" colspan=2>
+									 <button type="submit" class="btn btn-default cart btn-block" name='btnaddtocart' data-id="<?php echo $barang['id'];?>">
+									 	 <i class="glyphicon glyphicon-shopping-cart"></i> Add to cart
+									 </button>
+								 </td>
+							 </tr>
+						 <?php else :?>
+							 <tr>
+								 <td colspan=2>
+							  		 <span class='label label-danger'>Out of Stock</span>
+						  		 </td>
+					 		 </tr>
+						 <?php endif;?>
+					 </table>
+
                 <!-- share facebook and twitter-->
-                <div class="fb-share-button" data-href="<?php echo site_url('item/detail/'.$barang['id']);?>" data-layout="button_count"></div>
-                <a href="http://twitter.com/home?status=Buy now! <?php echo site_url('item/detail/'.$barang['id']);?>" title="Click to share this post on Twitter"><i class='fa fa-twitter'></i>Share to Twitter</a><br/><br/>
-				<div class="btn btn-sm btn-info"><?php $id = $barang['id']; echo anchor("items/compare?comp1=$id","Compare","style = 'text-decoration: none; color: #FFFFFF'"); ?>
-				</div>
+                <p><div class="fb-share-button" data-href="<?php echo site_url('item/detail/'.$barang['id']);?>" data-layout="button_count"></div></p>
+
+                <p><a href="http://twitter.com/home?status=Buy now! <?php echo site_url('item/detail/'.$barang['id']);?>" title="Click to share this post on Twitter"><i class="fa fa-twitter"></i>Share to Twitter</a></p>
+
+					<button class="btn btn-sm btn-info"><?php $id = $barang['id']; echo anchor("items/compare?comp1=$id","Compare","style = 'text-decoration: none; color: #FFFFFF'"); ?>
+					</button>
 				<br>
 				<?php
                     if ($this->session->userdata('p_username')) {
                         // TOMBOL WISH LIST
 						echo form_open('profile/wish_list',"",['id_barang' => $barang['id']]);
 						echo '<input type="submit" name="add" value="Add to Wish List" class="btn btn-default">';
-						echo form_close();		
+						echo form_close();
 					}
 				?>
-				
+				<p class='text-muted'>#ID: <?php echo $barang['id'];?></p>
+
             </div><!--/product-information-->
         </div>
     </div><!--/product-details-->
