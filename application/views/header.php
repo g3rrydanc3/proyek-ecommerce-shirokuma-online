@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php echo $title;?> | My Compu-Shop </title>
+    <title><?php echo $title;?> | Shirokumaonline </title>
     <link href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css')?>" rel="stylesheet">
     <link href="<?php echo base_url('assets/css/style.css')?>" rel="stylesheet">
     <link href="<?php echo base_url('assets/css/jquery-ui.min.css')?>" rel="stylesheet">
-	
+
     <script src="<?php echo base_url('assets/js/jquery-2.1.4.min.js')?>"></script>
     <script src="<?php echo base_url('assets/js/jquery-ui.min.js')?>"></script>
 	<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
-	
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -89,7 +89,7 @@
 
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="access_link">  <?php echo $this->session->userdata('p_username');?></a>
                             <ul class="dropdown-menu">
-								
+
                                 <li><?php echo anchor('profile','Profile');?></li>
                                 <li><?php echo anchor('profile/wish_list','My Wishlist');?></li>
 								<li><?php echo anchor('profile/order','My Order');?></li>

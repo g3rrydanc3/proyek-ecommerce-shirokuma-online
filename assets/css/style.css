@@ -132,3 +132,16 @@
 .box-item .thumbnail{
     height:375px;
 }
+
+.table-item-description{
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+.table-item-description > tbody > tr > td{
+	padding-right: 10px;
+}
+
+.hr-slim{
+	margin:0px
+}

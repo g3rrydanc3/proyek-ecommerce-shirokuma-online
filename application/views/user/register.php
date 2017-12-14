@@ -1,4 +1,3 @@
-<script src='https://www.google.com/recaptcha/api.js'></script>
     <section id="hero" class="login">
     	<div class="container">
         	<div class="row">
@@ -33,7 +32,6 @@
                                 </div>
 
                                 <div id="pass-info" class="clearfix"></div>
-                       <!-- <div class="g-recaptcha" data-sitekey="6Lc6jQ4UAAAAAFmWLlIc3HJVUWxnwfHxvPhIKvbi"></div>-->
                                 <?php echo form_checkbox(['name'=>'agreeTerms','value'=>'agree']);?> By signing up to this site, I agree to the Terms and Conditions of this site.<br/><br/>
                                 <?php echo form_error('agreeTerms', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
 								<?php echo form_submit('btnRegister', 'Create an account', 'class="btn btn-primary btn-block"');?>

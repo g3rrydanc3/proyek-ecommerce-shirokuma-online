@@ -1,6 +1,3 @@
-/**
- * Created by MESHIANG on 12/5/2015.
- */
 $(document).ready(function(){
     $('.ui.dropdown').dropdown();
     $('.menu .browse')
@@ -15,5 +12,3 @@ $(document).ready(function(){
         })
     ;
 });
-
-

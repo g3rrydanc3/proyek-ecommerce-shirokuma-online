@@ -49,17 +49,9 @@ class Auth extends CI_Controller
 			$this->form_validation->set_rules('conf_password','Confirm Password','required|matches[password]|trim');
 			$this->form_validation->set_rules('agreeTerms','Terms and Conditions','required');
 			if ($this->form_validation->run()) {
-				$this->load->library('curl');
-				// $arr = json_decode($this->curl->simple_post('https://www.google.com/recaptcha/api/siteverify',
-				// ['secret' => '6Lfz6-8SAAAAADfmzCkF1Jd4Tb8r1XH0TmQ2Dcsa',
-				// 'response'=> $this->input->post('g-recaptcha-response'),
-				// 'remoteip' => $this->session->userdata('ip_address')
-				// ], ['SSL_VERIFYPEER' => false])
-				// );
-				// if ($arr->success) {
 				$this->load->library('email');
 				$this->email->to($this->input->post('email'));
-				$this->email->from('admin@compushop.hol.es', 'Admin Shirokumaonline');
+				$this->email->from('admin@shirokumaonline.co.vu', 'Shirokumaonline');
 				$this->email->subject('Welcome to Shirokumaonline');
 				$this->email->message($this->load->view('email/welcome', null, true));
 				if ($this->email->send()) {
@@ -68,7 +60,7 @@ class Auth extends CI_Controller
 						$this->session->set_flashdata('alert_level', 'success');
 						$this->session->set_flashdata('alert', '<strong>Menunggu Verifikasi Email Anda!</strong><br/>Terima kasih telah bergabung dengan Shirokumaonline');
 						$this->email->to($this->input->post('email'));
-						$this->email->from('admin@compushop.hol.es', 'Admin Shirokumaonline');
+						$this->email->from('admin@shirokumaonline.co.vu', 'Shirokumaonline');
 						$data['link'] = anchor('auth/activate?key='.$success, 'Activate Your Account Now');
 						$this->email->subject('Confirm your account | Shirokumaonline');
 						$this->email->message($this->load->view('email/confirm', $data, true));
@@ -77,16 +69,10 @@ class Auth extends CI_Controller
 					}
 				} else {
 					$this->session->set_flashdata('alert_level', 'danger');
-					// $this->session->set_flashdata('alert', 'Email tidak valid.');
+					$this->session->set_flashdata('alert', 'Email tidak valid.');
 					//echo $this->email->print_debugger();
 					redirect('auth/login');
 				}
-				// }
-                // else {
-                    // $this->session->set_flashdata('alert_level', 'danger');
-                    // $this->session->set_flashdata('alert', 'Human Verification failed.');
-                    // redirect('auth/register');
-                // }
 			}
 		}
 		$data['title'] = "Register to Shirokumaonline";
@@ -183,7 +169,7 @@ class Auth extends CI_Controller
 
 					$this->load->library('email');
 					$this->email->to($email);
-					$this->email->from('admin@compushop.hol.es','Admin Shirokumaonline');
+					$this->email->from('admin@shirokumaonline.co.vu','Admin Shirokumaonline');
 					$this->email->subject('Reset your account');
 					$data['link'] = anchor('auth/reset_password?forgot_key='.$key, 'Reset Password');
 					$this->email->message($this->load->view('email/reset_password',$data,true));

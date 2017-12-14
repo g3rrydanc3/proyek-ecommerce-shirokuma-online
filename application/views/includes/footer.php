@@ -2,11 +2,11 @@
 <footer class="footer navbar-fixed-bottom">
 	<div class="container-fluid">
 		<div class="col-sm-6">
-			<p class="navbar-text">©Copyright 2015     My Compu-Shop
-			<br>compu_shop@gmail.com
+			<p class="navbar-text">©Copyright 2017     Shirokumaonline
+			<br>shirokumaonline@gmail.com
 			</p>
 		</div>
-		
+
 		<div class="col-sm-6 ">
 			<p align="right" class="pull-right navbar-text">Jalan Ngagel Jaya Tengah 73 - 77
 			<br>Surabaya, Indonesia
