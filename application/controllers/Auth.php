@@ -39,7 +39,6 @@ class Auth extends CI_Controller
 	public function register()
 	{
 		$this->load->helper('form');
-		// Cek Button User Register
 		if ($this->input->post('btnRegister')) {
 			$this->load->library('form_validation');
 			$this->load->database();
@@ -56,29 +55,38 @@ class Auth extends CI_Controller
 				$this->email->message($this->load->view('email/welcome', null, true));
 				if ($this->email->send()) {
 					$success = $this->customer_model->registerUser($this->input->post('username'), $this->input->post('email'), $this->input->post('password'));
-					if ($success) {
-						$this->session->set_flashdata('alert_level', 'success');
-						$this->session->set_flashdata('alert', '<strong>Menunggu Verifikasi Email Anda!</strong><br/>Terima kasih telah bergabung dengan Shirokumaonline');
-						$this->email->to($this->input->post('email'));
-						$this->email->from('admin@shirokumaonline.co.vu', 'Shirokumaonline');
-						$data['link'] = anchor('auth/activate?key='.$success, 'Activate Your Account Now');
-						$this->email->subject('Confirm your account | Shirokumaonline');
-						$this->email->message($this->load->view('email/confirm', $data, true));
-						$this->email->send();
-						redirect('auth/login');
+					$this->session->set_flashdata('alert_level', 'success');
+					$this->session->set_flashdata('alert', '<strong>Menunggu Verifikasi Email Anda!</strong><br/>Terima kasih telah bergabung dengan Shirokumaonline');
+					$this->email->to($this->input->post('email'));
+					$this->email->from('admin@shirokumaonline.co.vu', 'Shirokumaonline');
+					$data['link'] = anchor('auth/activate?key='.$success, 'Activate Your Account Now');
+					$this->email->subject('Confirm your account | Shirokumaonline');
+					$this->email->message($this->load->view('email/confirm', $data, true));
+					if (!$this->email->send()) {
+						$this->session->set_flashdata('alert_level', 'danger');
+						$this->session->set_flashdata('alert', $this->email->print_debugger());
 					}
+					$data['title'] = "Register to Shirokumaonline";
+					$this->load->view('header',$data);
+					$this->load->view('user/register');
+					$this->load->view('footer');
 				} else {
 					$this->session->set_flashdata('alert_level', 'danger');
-					$this->session->set_flashdata('alert', 'Email tidak valid.');
+					$this->session->set_flashdata('alert', 'Email tidak valid.' . $this->email->print_debugger());
 					//echo $this->email->print_debugger();
-					redirect('auth/login');
+					$data['title'] = "Register to Shirokumaonline";
+					$this->load->view('header',$data);
+					$this->load->view('user/register');
+					$this->load->view('footer');
 				}
 			}
 		}
-		$data['title'] = "Register to Shirokumaonline";
-		$this->load->view('header',$data);
-		$this->load->view('user/register');
-		$this->load->view('footer');
+		else {
+			$data['title'] = "Register to Shirokumaonline";
+			$this->load->view('header',$data);
+			$this->load->view('user/register');
+			$this->load->view('footer');
+		}
 	}
 
 	/**

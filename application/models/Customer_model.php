@@ -13,7 +13,7 @@ class Customer_model extends CI_Model
 	}
 	public function registerUser($username, $email,  $password)
 	{
-		$rand = random_string('alpha',32);
+		$rand = getToken(32);
 		$data = [ 'username' => $username ,
 				'password' => $this->encrypt->encode($password),
 				'email' => $email,
@@ -106,7 +106,7 @@ class Customer_model extends CI_Model
 		if ($this->db->affected_rows() == 0) {
 			return -1; // There is no account with that emails
 		}
-		$key =  random_string('alpha',32);
+		$key =  getToken(32);
 		$data = ['kode_verifikasi' => $key];
 		$this->db->where('email', $email);
 		$this->db->update('users',$data);
