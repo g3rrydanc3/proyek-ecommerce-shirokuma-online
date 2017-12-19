@@ -21,13 +21,13 @@ class Admin extends CI_Controller
 		$this->load->library('session');
 		$this->load->library('form_validation');
 		$this->load->library('pagination');
-		$this->load->library('gcharts');
+		//$this->load->library('gcharts');
 		$this->load->library('upload');
 
-		$this->load->model('model_user');
-		$this->load->model('model_voucher');
-		$this->load->model('model_reports');
-		$this->load->model('barang_model');
+		$this->load->model('Model_user', 'model_user');
+		$this->load->model('Model_voucher', 'model_voucher');
+		$this->load->model('Model_reports', 'model_reports');
+		$this->load->model('Barang_model', 'barang_model');
 	}
 
 	/**
@@ -37,7 +37,8 @@ class Admin extends CI_Controller
 	*/
 	public function index()
 	{
-		$this->dashboard();
+		redirect('http://compushop.hol.es/_compu_shop-master/admin');
+		//$this->dashboard();
 	}
 
 	/**

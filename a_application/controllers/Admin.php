@@ -24,9 +24,9 @@ class Admin extends CI_Controller
 		$this->load->library('gcharts');
 		$this->load->library('upload');
 
-		//$this->load->model('Model_user', 'model_user');
-		//$this->load->model('Model_voucher', 'model_voucher');
-		//$this->load->model('Model_reports', 'model_reports');
+		$this->load->model('Model_user', 'model_user');
+		$this->load->model('Model_voucher', 'model_voucher');
+		$this->load->model('Model_reports', 'model_reports');
 		$this->load->model('Barang_model', 'barang_model');
 	}
 
