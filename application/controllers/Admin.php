@@ -37,7 +37,8 @@ class Admin extends CI_Controller
 	*/
 	public function index()
 	{
-		$this->dashboard();
+		//$this->dashboard();
+		redirect(base_url('admin.php'));
 	}
 
 	/**
