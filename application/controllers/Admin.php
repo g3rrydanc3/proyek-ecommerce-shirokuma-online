@@ -37,8 +37,7 @@ class Admin extends CI_Controller
 	*/
 	public function index()
 	{
-		redirect('http://compushop.hol.es/_compu_shop-master/admin');
-		//$this->dashboard();
+		$this->dashboard();
 	}
 
 	/**
